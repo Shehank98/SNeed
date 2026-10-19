@@ -1,0 +1,22 @@
+{
+  "name": "sneed",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Handwriting practice PWA for young children (three-line method: Sky, Clouds, Grass, Dirt)",
+  "type": "module",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "start": "node server.js",
+    "preview": "vite preview --host",
+    "letters": "node tools/build-letters.mjs",
+    "icons": "node tools/make-icons.mjs",
+    "test": "node --test test/*.test.js"
+  },
+  "dependencies": {
+    "compression": "^1.7.5",
+    "express": "^4.21.2",
+    "vite": "^5.4.11"
+  }
+}
