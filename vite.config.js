@@ -28,7 +28,9 @@ function swPrecache() {
       const hash = crypto.createHash('sha1');
       for (const f of files) if (f !== 'sw.js') hash.update(f).update(fs.readFileSync(path.join(root, f)));
       let src = fs.readFileSync(swPath, 'utf8');
-      src = src.replace('__PRECACHE__', JSON.stringify(list)).replace('__VERSION__', hash.digest('hex').slice(0, 10));
+      src = src
+        .replace('const PRECACHE = __PRECACHE__;', `const PRECACHE = ${JSON.stringify(list)};`)
+        .replace("const VERSION = '__VERSION__';", `const VERSION = '${hash.digest('hex').slice(0, 10)}';`);
       fs.writeFileSync(swPath, src);
     },
   };

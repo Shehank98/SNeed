@@ -9,7 +9,7 @@ const sleep = (ms, ctl) => new Promise((res) => { ctl.timers.push(setTimeout(res
  * Animate the letter on stage.gx. Resolves true when finished, false if cancelled.
  * `onStroke(i)` fires when stroke i begins (start dot pulses first).
  */
-export function playWatch(stage, letter, { speed = 1.5, onStroke, skydiverLetters = true } = {}) {
+export function playWatch(stage, letter, { speed = 1.5, onStroke, skydiverLetters = true, dx = 0, keep = [] } = {}) {
   const ctl = { cancelled: false, timers: [] };
   ctl.cancel = () => { ctl.cancelled = true; ctl.timers.forEach(clearTimeout); cancelAnimationFrame(ctl.raf); };
   const ctx = stage.gx;
@@ -23,6 +23,7 @@ export function playWatch(stage, letter, { speed = 1.5, onStroke, skydiverLetter
     ctx.lineCap = 'round'; ctx.lineJoin = 'round';
     ctx.strokeStyle = COLORS.ink; ctx.fillStyle = COLORS.ink;
     ctx.lineWidth = Math.max(7, L() * 0.15);
+    for (const pts of keep) drawPts(ctx, stage, pts);
     for (const pts of done) drawPts(ctx, stage, pts);
     if (cur) drawPts(ctx, stage, cur.slice(0, upTo));
     extra?.();
@@ -37,7 +38,8 @@ export function playWatch(stage, letter, { speed = 1.5, onStroke, skydiverLetter
       paint(done);
       await sleep(i === 0 ? 700 : 450, ctl);
       if (ctl.cancelled) return false;
-      const pts = s.dot ? [s.points[0], s.points[0]] : resample(s.points, 90);
+      const shifted = s.points.map((p) => [p[0] + dx, p[1]]);
+      const pts = s.dot ? [shifted[0], shifted[0]] : resample(shifted, 90);
       const len = s.dot ? 0.3 : pathLength(s.points);
       const dur = Math.max(s.dot ? 350 : 600, (len / speed) * 1000);
       const bottom = hasBounce && !s.dot ? pts.reduce((b, p, k) => (p[1] > pts[b][1] ? k : b), 0) : -1;

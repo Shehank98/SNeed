@@ -1,5 +1,5 @@
 /* Service worker: precaches the built app so it works offline after the first visit.
-   __PRECACHE__ and __VERSION__ are filled in by vite.config.js after the build. */
+   The file list and version below are filled in by vite.config.js after the build. */
 const VERSION = '__VERSION__';
 const CACHE = 'letter-heroes-' + VERSION;
 const PRECACHE = __PRECACHE__;

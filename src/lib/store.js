@@ -44,6 +44,7 @@ export const store = {
       id: 'p' + Date.now().toString(36) + Math.random().toString(36).slice(2, 5),
       name: name.trim() || 'Me', avatar, created: Date.now(),
       ...PROFILE_DEFAULTS,
+      lineSize: Math.min(window.innerWidth, window.innerHeight) < 600 ? 'large' : 'medium', // phones start big
       letters: {}, // char -> {plays, best, trace, copy, last, needs:{cue:n}}
       streak: { count: 0, last: null },
       totalStars: 0,
@@ -101,4 +102,4 @@ export const store = {
   checkPin: (pin) => store.hashPin(pin) === state.pinHash,
 };
 
-export const SIZE_FACTOR = { small: 0.62, medium: 0.8, large: 1 };
+export const SIZE_FACTOR = { small: 0.66, medium: 0.83, large: 1 };

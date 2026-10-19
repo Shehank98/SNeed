@@ -27,13 +27,14 @@ export default function practice({ params, go }) {
   const letter = byChar[char];
   const profile = store.profile();
   let nextStroke = 0;
+  let grassOn = false; // "highlight the grass line" on demand
   let watchCtl = null;
   let busy = false; // result shown or demo playing
   let evaluated = false;
 
   const stage = new Stage({
     layout: letterLayout(letter, profile.lineSize),
-    getZones: () => zonesOf(profile),
+    getZones: () => ({ ...zonesOf(profile), highlightGrass: profile.highlightGrass || grassOn }),
     drawGuide: (ctx) => paintGuide(ctx),
     onStrokeEnd: (i) => strokeDone(i),
   });
@@ -48,7 +49,8 @@ export default function practice({ params, go }) {
   const cueRow = h('div', { class: 'cue-row' });
   const resultEl = h('div', { class: 'result hidden' });
   const modelEl = h('div', { class: 'model hidden' });
-  stage.overlay.append(cueRow, resultEl, modelEl);
+  const grassB = h('button', { class: 'grass-btn', type: 'button', title: t('highlightGrass'), 'aria-label': t('highlightGrass'), onclick: () => { grassOn = !grassOn; grassB.classList.toggle('on', grassOn); stage.redrawBg(); } }, '🌱');
+  stage.overlay.append(cueRow, resultEl, modelEl, grassB);
 
   const undoB = btn({ ico: 'undo', label: t('undo'), onClick: () => { if (!busy) { stage.undo(); syncNext(); } } });
   const clearB = btn({ ico: 'clear', label: t('clear'), onClick: () => { if (!busy) reset(); } });
@@ -94,7 +96,7 @@ export default function practice({ params, go }) {
   // ---------- modes ----------
   function showCues(speakIt) {
     cueRow.replaceChildren(...letter.cues.slice(0, 2).map((k) => cueCard(k)));
-    cueRow.classList.remove('hidden');
+    cueRow.classList.remove('hidden', 'compact');
     if (speakIt) speak(`${letterSpeak(letter)}. ${letter.cues.slice(0, 2).map(cueText).join(' ')}`);
   }
 
@@ -116,6 +118,7 @@ export default function practice({ params, go }) {
       if (!ok) return;
       watchCtl = null;
       watchDone = true;
+      cueRow.classList.add('compact');
       stage.frozen = mode === 'watch';
       staticMarkers();
       stage.redrawGuide();

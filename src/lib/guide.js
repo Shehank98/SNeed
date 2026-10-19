@@ -17,13 +17,13 @@ export function drawDotted(ctx, stage, letter, from = 0) {
       return;
     }
     path(ctx, pts);
-    ctx.strokeStyle = 'rgba(122,107,214,.13)';
+    ctx.strokeStyle = 'rgba(122,107,214,.2)';
     ctx.lineWidth = Math.max(18, L * 0.3);
     ctx.stroke();
     path(ctx, pts);
-    ctx.strokeStyle = i < from ? 'rgba(122,107,214,.35)' : '#7a6bd6';
-    ctx.lineWidth = Math.max(4, L * 0.07);
-    ctx.setLineDash([0.01, Math.max(9, L * 0.16)]);
+    ctx.strokeStyle = i < from ? 'rgba(122,107,214,.35)' : '#5a47c9';
+    ctx.lineWidth = Math.max(5, L * 0.085);
+    ctx.setLineDash([0.01, Math.max(11, L * 0.15)]);
     ctx.stroke();
     ctx.setLineDash([]);
   });
