@@ -51,7 +51,7 @@ export default function words({ go }) {
         const x = o.status === 'tight' ? o.gap.x0 + i * CLOUD_W + CLOUD_W / 2 : startX + i * CLOUD_W + CLOUD_W / 2;
         const [px, py] = stage.px(x, 1.5);
         ctx.globalAlpha = fits ? 1 : 0.55;
-        drawCloud(ctx, px, py, cw * 0.9, fits ? '#d9ffe4' : '#ffe0e0', fits ? '#2fb84f' : '#e05252');
+        drawCloud(ctx, px, py, (cw * 0.92) / 1.6, fits ? '#d9ffe4' : '#ffe0e0', fits ? '#2fb84f' : '#e05252');
       }
       ctx.globalAlpha = 1;
       // bracket under the gap
